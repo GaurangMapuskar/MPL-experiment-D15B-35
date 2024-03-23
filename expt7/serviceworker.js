@@ -19,7 +19,7 @@
 // });
 
 var staticCacheName = "GAU";
- 
+
 self.addEventListener("install", function (e) {
   e.waitUntil(
     caches.open(staticCacheName).then(function (cache) {
@@ -27,10 +27,10 @@ self.addEventListener("install", function (e) {
     })
   );
 });
- 
+
 self.addEventListener("fetch", function (event) {
   console.log(event.request.url);
- 
+
   event.respondWith(
     caches.match(event.request).then(function (response) {
       return response || fetch(event.request);
@@ -38,26 +38,36 @@ self.addEventListener("fetch", function (event) {
   );
 });
 
-self.addEventListener('install', function(event) {
-    // Perform some task
-    });
 
+self.addEventListener('sync', event => {
+  if
+    (event.tag === 'syncMessage') {
 
-    self.addEventListener('activate', function(event) {
-        event.waitUntil(
-            // Perform cleanup tasks or cache management here
-            // For example, deleting outdated caches
-            caches.keys().then(function(cacheNames) {
-                return Promise.all(
-                    cacheNames.filter(function(cacheName) {
-                        // Check if the cache name is outdated and needs to be deleted
-                        // For example, you might compare cache names with the current cache version
-                    }).map(function(cacheName) {
-                        // Delete the outdated cache
-                        return caches.delete(cacheName);
-                    })
-                );
-            })
-        );
-    });
-    
+    console.log("Sync successful!")
+  }
+});
+
+self.addEventListener('push', function (event) {
+
+  if (event && event.data) {
+    var data = event.data.json();
+    if (data.method == "pushMessage") {
+      console.log("Push notiﬁcation sent");
+      event.waitUntil(self.registration.showNotification("My watch", {
+        body: data.message
+      }))
+    }
+  }
+})
+
+var checkResponse = function (request) {
+  return new Promise(function (fulfill, reject) {
+    fetch(request).then(function (response) {
+      if (response.status !== 404) {
+        fulfill(response);
+      } else {
+        reject();
+      }
+    }, reject);
+  });
+};

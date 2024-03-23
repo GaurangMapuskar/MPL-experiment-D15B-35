@@ -6,9 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title></title>
     <link rel="stylesheet" href="./styles.css">
-    <link rel="manifest"
-        href="manifest.json">
-    <script defer data-domain="gaurangmapuskar.github.io/daboticsinternship" src="https://plausible.io/js/script.js"></script>
+    <link rel="manifest" href="manifest.json">
+    <script defer data-domain="gaurangmapuskar.github.io/daboticsinternship"
+        src="https://plausible.io/js/script.js"></script>
 </head>
 
 <body>
@@ -139,7 +139,7 @@
             </div>
         </div>
         <div class="watch-list">
-            
+
             <div class="watch">
                 <div class="image">
                     <img src='./watch 6.jpg' alt='' />
@@ -184,7 +184,7 @@
                         <a href="/">Add to Cart</a>
                     </div>
                 </div>
-            </div> 
+            </div>
         </div>
     </div>
     </div>
@@ -225,22 +225,41 @@
 
     <script>
         window.addEventListener('load', () => {
-      registerSW();
-    });
- 
-    // Register the Service Worker
-    async function registerSW() {
-      if ('serviceWorker' in navigator) {
-        try {
-          await navigator
-                .serviceWorker
-                .register('serviceworker.js');
+            registerSW();
+        });
+
+        // Register the Service Worker
+        async function registerSW() {
+            if ('serviceWorker' in navigator) {
+                try {
+                    await navigator
+                        .serviceWorker
+                        .register('serviceworker.js');
+                    console.log('Service Worker registered with scope');
+                    askForNPerm(); 
+                }
+                catch (e) {
+                    console.log('SW registration failed');
+                }
+            }
         }
-        catch (e) {
-          console.log('SW registration failed');
+
+        document.querySelector("button").addEventListener("click", async () => {
+            var swRegistration = await navigator.serviceWorker.register("serviceworker.js");
+            swRegistration.sync.register("helloSync").then(function () {
+                console.log("helloSync success [main.js]");
+            });
+        });
+        function askForNPerm() {
+            Notification.requestPermission(function (result) {
+                console.log("User choice", result);
+                if (result !== "granted") {
+                    console.log("No notification permission granted!");
+                } else {
+                    configurePushSub();// Write your custom function that pushes your message
+                }
+            });
         }
-      }
-    }
     </script>
 </body>
 
