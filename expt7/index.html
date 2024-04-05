@@ -9,6 +9,8 @@
     <link rel="manifest" href="manifest.json">
     <script defer data-domain="gaurangmapuskar.github.io/daboticsinternship"
         src="https://plausible.io/js/script.js"></script>
+    <meta name="theme-color" content="#ffffff">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
@@ -236,7 +238,6 @@
                         .serviceWorker
                         .register('serviceworker.js');
                     console.log('Service Worker registered with scope');
-                    askForNPerm(); 
                 }
                 catch (e) {
                     console.log('SW registration failed');
@@ -250,16 +251,7 @@
                 console.log("helloSync success [main.js]");
             });
         });
-        function askForNPerm() {
-            Notification.requestPermission(function (result) {
-                console.log("User choice", result);
-                if (result !== "granted") {
-                    console.log("No notification permission granted!");
-                } else {
-                    configurePushSub();// Write your custom function that pushes your message
-                }
-            });
-        }
+        
     </script>
 </body>
 
